@@ -109,3 +109,9 @@ def train_noise(row):
     return {'geometry': geom, 'centroid': centroid, 'dist_train': line_len, 'shortest_line_1': line,
             'num_intersections': num_int_bldgs, 'tot_stories': tot_height, 'max_height': max_height}
 ```
+
+<div align="center">
+    <img src="plots/disttrain_hist.png" width=49%> <img src="plots/numintersections_hist.png" width=49%>
+    <img src="plots/maxheight_hist.png" width=49%> <img src="plots/totheight_hist.png" width=49%>
+    <img src="plots/traindist_intersections_scatter.png" width=75%>
+</div>
