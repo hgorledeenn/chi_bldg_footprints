@@ -110,6 +110,14 @@ def train_noise(row):
             'num_intersections': num_int_bldgs, 'tot_stories': tot_height, 'max_height': max_height}
 ```
 
+#### Basic analysis of function output:
+
+Top left: Histogram of each building's distance to the train<br>
+Top right: Histogram of each building's # of intersections on the closest line to the train<br>
+Middle left: Histogram of each the maximum height of a building intersected on the closest line to the train<br>
+Middle right: Histogram of each the total heights of intersected on the closest line to the train<br>
+Bottom: Scatter plot of the distance to the train on the x-axis and the # of intersections on that line on the y-axis, with alpha=0.01<br>
+
 <div align="center">
     <img src="plots/disttrain_hist.png" width=49%> <img src="plots/numintersections_hist.png" width=49%>
     <img src="plots/maxheight_hist.png" width=49%> <img src="plots/totheight_hist.png" width=49%>
