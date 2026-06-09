@@ -61,6 +61,8 @@ Subways don't generate *zero* noise perceptable above ground, but it is signific
 
 Also important to note: the only two trains that go below ground for parts of their runs are the Blue and Red lines, and those two lines are only close to each other for about a 6 block stretch, and that stretch is within the Loop, the place where every single train line is in close proximity. Because if this, too, I think it will be OK to not assume an addative effect of living near both the Blue and Red lines the same way someone would experience living near the separation of the Red and Brown lines on the north side.
 
+<hr>
+
 ### [4_full_bldg_analysis.ipynb](4_full_bldg_analysis.ipynb)
 
 #### My current function:
