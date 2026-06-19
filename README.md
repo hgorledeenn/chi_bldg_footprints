@@ -3,10 +3,22 @@
 Based on this [building footprint data](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data) and this [CTA line data](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data) from the City of Chicago.
 
 What I have to do:
-- Measure ambient city noise for typical volume
-- Measure train volume at different points (when it's going fast, when it's braking/turning, when it's pulling into station)
-- Compute new values for how far the sound will take to reach ambient city noise level
+- Noise measurements in Chicago
+    - Measure ambient city noise for typical volume
+    - Measure train volume at different points (when it's going fast, when it's braking/turning, when it's pulling into station)
+    - Compute new values for how far the sound will take to reach ambient city noise level
+- Contact Chicago bldgs dept about data (lack of `stories` values for ~400,000 buildings)
+- Calculate daily cars per line segment value and add it to train data spreadsheet
+- Create updated circle-based noise calculations function
 
+<hr>
+
+# Current Project:
+My first function only created a single line between each building's centroid and the nearest point on any CTA line. For reasons explained [a few sections down](#3_merging_train_linesipynb), it's important to calculate noise levels for multiple lines to allow for cases where a building is situated near a corner created by two lines intersecting or overlapping. The below diagram and accompanying text outlines how the function I'm currently working on will solve this problem by drawing a radius based on the distance it takes noise from the train to quiet to the average city noise level and calculating noise for several lines between the building centroid and the edge of the circle.
+
+<img src="imgs/circular_noise_calculations.png" width="75%" caption="my box in relation to Chicago">
+
+<br>
 <hr>
 
 # 1st Iteration:
