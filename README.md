@@ -14,9 +14,11 @@ What I have to do:
 <hr>
 
 # Current Project:
-My first function only created a single line between each building's centroid and the nearest point on any CTA line. For reasons explained [a few sections down](#3_merging_train_linesipynb), it's important to calculate noise levels for multiple lines to allow for cases where a building is situated near a corner created by two lines intersecting or overlapping. The below diagram and accompanying text outlines how the function I'm currently working on will solve this problem by drawing a radius based on the distance it takes noise from the train to quiet to the average city noise level and calculating noise for several lines between the building centroid and the edge of the circle.
+My first function only created a single line between each building's centroid and the nearest point on any CTA line. For reasons explained [a few sections down](#3_merging_train_linesipynb), it's important to calculate noise levels for multiple lines to allow for cases where a building is situated near a corner created by two lines intersecting or overlapping.
 
-<img src="imgs/circular_noise_calculations.png" width="75%" caption="my box in relation to Chicago">
+The below diagram and accompanying text outlines how the function I'm currently working on will solve this problem by drawing a radius based on the distance it takes noise from the train to quiet to the average city noise level and calculating noise for several lines between the building centroid and the edge of the circle.
+
+<img src="imgs/circular_noise_calculations.png" width="100%" caption="my box in relation to Chicago">
 
 <br>
 <hr>
