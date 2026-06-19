@@ -2,7 +2,14 @@
 
 Based on this [building footprint data](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data) and this [CTA line data](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data) from the City of Chicago.
 
+What I have to do:
+- Measure ambient city noise for typical volume
+- Measure train volume at different points (when it's going fast, when it's braking/turning, when it's pulling into station)
+- Compute new values for how far the sound will take to reach ambient city noise level
+
 <hr>
+
+# 1st Iteration:
 
 ### [2_bldg_intersections.ipynb](2_bldg_intersections.ipynb)
 
