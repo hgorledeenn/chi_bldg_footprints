@@ -3,6 +3,7 @@
 Based on this [building footprint data](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data) and this [CTA line data](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data) from the City of Chicago.
 
 What I have to do:
+- Do I need to focus on difference between #s of cars in my train noise calc? (4/6/8, etc.)
 - Noise measurements in Chicago
     - Measure ambient city noise for typical volume
     - Measure train volume at different points (when it's going fast, when it's braking/turning, when it's pulling into station)
