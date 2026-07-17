@@ -2,7 +2,7 @@
 
 > <img src="imgs/apt_view.JPG" width="75%"><br>
 > The view from my sophomore year dorm room at Loyola University Chicago <br>
-> <i>(A.K.A. my firsthand experience living near the noise of the CTA Red Line)</i>
+> <i>(my firsthand experience living right next to the 24/7 CTA Red Line)</i>
 
 ## Contents:
 1. [The Project](#the-project) <br>
