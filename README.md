@@ -7,7 +7,9 @@
 ## Contents:
 1. [The Project](#the-project) <br>
 2. [The Data](#the-data) <br>
-3. [Methodology](#methodology) <br>
+3. [My Function](#my-function) <br>
+    3.1 [First Attempt](#first-attempt) <br>
+4. [Noise Measurements](#noise-measurements)
 
 
 ## The Project:
@@ -17,6 +19,7 @@ In this project, I conduct a spatial analysis of buildings in Chicago to estiamt
 
 The ultimate goal of this project is to create a reliable measure of expected noise per building to incorporate into a regression model along with housing price data and other factors that cause rental/home prices to fluctuate (neighborhood desireability/building amenities/proximity to city center/etc.) that will allow me to quantify the "train tax" or the optimal distance to live from the train to maximize accessibility while minimzing noise exposure.
 
+<br>
 
 ## The Data:
 My analysis largely relies on two data sets, both of them public and maintained by the city.
@@ -27,15 +30,41 @@ This data set contains information about every building in the city. Most import
 ### [CTA Line Geometries](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data):
 This data set contains line elements representing the positions of the Chicago Transit Authority's trains.
 
+<br>
 
-## Methodology:
+## My Function:
 The current iteration of this project is my second try at estimating noise for buildings. The code for my first attempt can be found in the [first_attempt_notebooks](/first_attempt_notebooks/) folder.
 
 In this approach I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). This illustration outlines the basic logic of my function:
 
 <img src="imgs/circular_noise_calculations.png" width="90%" caption="my box in relation to Chicago">
 
-As above, my Python function 
+As above, my Python function has multiple steps. Below, I break the function's code into chunks based on its purpose and outline the specific code that achieves this purpose.
+
+### Defining variables
+I conducted 
+``` Python
+noise_radius = 802 ## meters
+radial_angles = [0, 45, 90, 135, 180, 225, 270, 315]
+
+hwy_ambient = 76.15 ## dB
+eag_ambient = 64.93 ## dB
+train_avg = 93.97 ## dB
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -43,12 +72,9 @@ My first function only created a single line between each building's centroid an
 
 The below diagram and accompanying text outlines how the function I'm currently working on will solve this problem by drawing a radius based on the distance it takes noise from the train to quiet to the average city noise level and calculating noise for several lines between the building centroid and the edge of the circle.
 
-<img src="imgs/circular_noise_calculations.png" width="100%" caption="my box in relation to Chicago">
-
 <br>
-<hr>
 
-# 1st Iteration:
+## 1st Iteration:
 
 ### [2_bldg_intersections.ipynb](2_bldg_intersections.ipynb)
 
