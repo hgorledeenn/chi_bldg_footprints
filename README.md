@@ -1,25 +1,47 @@
-# Geospatial analysis of the noise experienced by each building in Chicago from the Chicago Transit Authority "el" Trains
+# Geospatial Analysis of Noise experienced by Buildings from the Chicago Transit Authority "El" Trains
 
-Based on this [building footprint data](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data) and this [CTA line data](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data) from the City of Chicago.
-
-<hr>
+> <img src="imgs/apt_view.JPG" width="50%"><br>
+> The view from my sophomore year dorm room at Loyola University Chicago <br>
+> <i>(A.K.A. my firsthand experience living near the noise of the CTA Red Line)</i>
 
 ## Contents:
-1. [The Project](#the-project)
-2. [The Data](#the-data)
-3. [Methods](#methods) <br>
+1. [The Project](#the-project) <br>
+2. [The Data](#the-data) <br>
+3. [Methodology](#methodology) <br>
     3.1: 
-4. [The Function](#the-function)
-5. This header
-    - 5.1. This header
-6. [First Attempt](first-attempt)
+4. [The Function](#the-function) <br>
+5. [#](#)
+6. [First Attempt](first-attempt) <br>
 
 
 
-<hr>
+## The Project:
+This repository is one piece of the data analysis for my Columbia Journalism School master's thesis, which will be finished in Aug. 2026.
 
-# The Project:
-This project involved 
+In this project, I conduct a spatial analysis of buildings in Chicago to estiamte the noise each building experiences as a result of the Chicago Transit Authority's train lines. The project uses sound level measurements I took around the city and the Shapely Python package to estimate each building's noise from trains, taking into account the average noise levels around the city.
+
+The ultimate goal of this project is to create a reliable measure of expected noise per building to incorporate into a regression model along with housing price data and other factors that cause rental/home prices to fluctuate (neighborhood desireability/building amenities/proximity to city center/etc.) that will allow me to quantify the "train tax" or the optimal distance to live from the train to maximize accessibility while minimzing noise exposure.
+
+
+## The Data:
+My analysis largely relies on two data sets, both of them public and maintained by the city.
+
+### [Building Footprints](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data):
+This data set contains information about every building in the city. Most importantly, it includes a geometry element for each building that shows the footprint of that building. This data is the foundation of my analysis and provides the specific locations and shapes of each of the building's I'm seeking to analyze.
+
+### [CTA Line Geometries](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Lines/xbyr-jnvx/about_data):
+This data set contains line elements representing the positions of the Chicago Transit Authority's trains.
+
+
+## Methodology:
+The current iteration of this project is my second try at estimating noise for buildings. The code for my first attempt can be found in the [first_attempt_notebooks](/first_attempt_notebooks/) folder.
+
+In this approach I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). This illustration outlines the basic logic of my function:
+
+<img src="imgs/circular_noise_calculations.png" width="90%" caption="my box in relation to Chicago">
+
+As above, my Python function 
+
 
 
 My first function only created a single line between each building's centroid and the nearest point on any CTA line. For reasons explained [a few sections down](#3_merging_train_linesipynb), it's important to calculate noise levels for multiple lines to allow for cases where a building is situated near a corner created by two lines intersecting or overlapping.
