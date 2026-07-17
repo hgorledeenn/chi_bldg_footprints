@@ -1,6 +1,6 @@
 # Geospatial Analysis of Noise experienced by Buildings from the Chicago Transit Authority "El" Trains
 
-> <img src="imgs/apt_view.JPG" width="50%"><br>
+> <img src="imgs/apt_view.JPG" width="75%"><br>
 > The view from my sophomore year dorm room at Loyola University Chicago <br>
 > <i>(A.K.A. my firsthand experience living near the noise of the CTA Red Line)</i>
 
@@ -8,11 +8,6 @@
 1. [The Project](#the-project) <br>
 2. [The Data](#the-data) <br>
 3. [Methodology](#methodology) <br>
-    3.1: 
-4. [The Function](#the-function) <br>
-5. [#](#)
-6. [First Attempt](first-attempt) <br>
-
 
 
 ## The Project:
