@@ -118,8 +118,11 @@ train_avg = 93.97 ## dB
 <div align-content="left">
 
 \frac{1}{r} \cdot 10^{\frac{\text{dB}}{10}} = 10^{\frac{\text{expected dB at distance}}{10}}
+(1/r) × 10^(dB/10) = 10^(expected dB at distance/10)
 
 
+(1/r) × 10^(dB/10) = 10^(dB_expected/10)
+(1/r) × 10^(dB/10) = 10^(dBₑₓₚₑcₜₑd/10)
 $ \frac{1}{r} \cdot 10^{\frac{\text{dB}}{10}} = 10^{\frac{\text{dB}_{\text{expected}}}{10}} $
 
 </div>
