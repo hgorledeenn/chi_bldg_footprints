@@ -100,16 +100,19 @@ The current iteration of this project is my second try at estimating noise for b
 
 In this approach, I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). The below illustration outlines the basic logic of my function:
 
-<img src="imgs/circular_noise_calculations.png" width="90%" caption="my box in relation to Chicago">
+<img src="imgs/circular_noise_calculations.png" width="90%">
 
 The [entire annotated function](#my-full-annotated-function) can be found in the appendix, and the un-annotated version is in [3_running_my_function.ipynb](3_running_my_function.ipynb). I successfully ran my function on all ~800,000 buildings in my data in just under 7 hours.
 
 <br>
 
 ## 5. Results
+The below map shows all of my building footprints, where each building is filled according to its calculated daily noise value. As expected, the lighter colors (more noise) mirror the path of the CTA trains through the city. There is a hotspot of noise in the Loop (at the center-right of the map) which also makes sense: that is an above-ground section of track that is used by several different train routes.
+<div>
+<img src="imgs/map_of_noise_from_one_train.png" width="80%">
+</div>
 
-
-## 6. Appendix:
+## 6. Appendix
 
 ### Table 1: CTA line segment groups with the number of individual segments that are included in each group and the average daily number of trains that run on that section
 
