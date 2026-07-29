@@ -115,14 +115,7 @@ eag_ambient = 64.93 ## dB
 train_avg = 93.97 ## dB
 ```
 
-<div align-content="left">
-
 (1/r) × 10^(dB/10) = 10^(expected dB at distance/10)
-
-
-(1/r) × 10^(dB/10) = 10^(dB_expected/10)<br>
-
-</div>
 
 
 
