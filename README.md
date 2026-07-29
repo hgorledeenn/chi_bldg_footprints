@@ -97,25 +97,216 @@ I recorded noise using the National Institute for Occupational Safety and Health
 ## My Function:
 The current iteration of this project is my second try at estimating noise for buildings. The code for my first attempt can be found in the [first_attempt_notebooks](/first_attempt_notebooks/) folder.
 
-In this approach I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). This illustration outlines the basic logic of my function:
+In this approach, I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). The below illustration outlines the basic logic of my function:
 
 <img src="imgs/circular_noise_calculations.png" width="90%" caption="my box in relation to Chicago">
 
-As above, my Python function has multiple steps. Below, I break the function's code into chunks based on its purpose and outline the specific code that achieves this purpose.
+As above, my Python function has multiple steps. I have included the entire function below and left annotations throughout that explain the purpose of each code section
 
-### Defining variables
-I conducted my own measurements of noise around Chicago to ensure it my analysis was based in real-world noise levels.
-
-``` Python
+``` python
 noise_radius = 802 ## meters
-radial_angles = [0, 45, 90, 135, 180, 225, 270, 315]
+num_radials = 8 ## how many lines I want to draw between the center of the circle and its perimeter – likely to be somewhere around 8
+radial_angles = [0, 45, 90, 135, 180, 225, 270, 315] ## equally spaced angles to fill the circle with my radians
+cta_line_one_geom = cta_lines['geom'].union_all ## make a unified geom element to check for intersections against, as opposed to iterating through each of the individual cta line segments
 
 hwy_ambient = 76.15 ## dB
 eag_ambient = 64.93 ## dB
 train_avg = 93.97 ## dB
+
+
+def radial_noise_calc(row):
+    ## could also calculate centroid outside the function as one line of code, but i think this way is pretty fine also
+    building = row['geometry']
+    building_stories = row['stories']
+    centroid = building.centroid
+    
+    ## get the x and y coordinates of the centroid individually 
+    center_x = shapely.get_x(centroid)
+    center_y = shapely.get_y(centroid)
+
+    ## create my circle from the building's centroid with a radius based on my noise_radius value
+    circle = centroid.buffer(noise_radius)
+    
+    ## Check if my circle even intersects the CTA line; otherwise it's not close enough to get any noise from trains and can just exit
+    if not circle.intersects(cta_line_one_geom):
+        ## if the circle as drawn does not intersect with the CTA line geometry, then we can exit at this stage (assume 0 noise from CTA trains for that building)
+        return  {'geometry': building,
+                 'centroid': centroid,
+                 'noise_from_one_train': 0,
+                 'daily_noise': 0,
+                 'intersected_noise_from_one_train': 0,
+                 'intersected_daily_noise': 0,
+                 'num_radials': 0}
+    
+    
+    ## Start a blank radials list
+    radials = []
+
+    ## Make the radial lines one by one and append them to the radials list ONLY if they intersect the CTA_line_one_geom
+    for angle in radial_angles:
+        ## convert angles to radians
+        angle_radian = np.radians(angle)
+
+        ## find the x and y coordinates for where my radial will intersect the circle
+        point_x = center_x + noise_radius * np.cos(angle_radian)
+        point_y = center_y + noise_radius * np.sin(angle_radian)
+
+        ## make the radial itself based on the coordinates of the centroid and the x and y coordinates I just made
+        radial_line = LineString([centroid, Point(point_x, point_y)])
+
+        ## if the radial line intersects the CTA_line_one_geom, then append it to the radials list
+        if radial_line.intersects(cta_line_one_geom):
+            radials.append(radial_line)
+
+    num_radials = (len(radials))
+    
+    ## creating all these variable and setting them equal to 0 before calculating them for each radial and then adding them back to themselves to total for each building
+    total_noise_from_one_train = 0
+    total_daily_noise = 0
+    total_intersected_noise_from_one_train = 0
+    total_intersected_daily_noise = 0
+    noise_from_one_train = 0
+    daily_noise = 0
+    intersected_noise_from_one_train = 0
+    intersected_daily_noise = 0
+
+    ## now go through my list of radials to calculate the expected noise for the building along that radial
+    for radial in radials:
+        intersection = radial.intersection(cta_line_one_geom)
+
+        ### FIRST need to deal with how to find the closest intersection to the centroid. It's theoretically possible (though practically unlikely) for my intersection variable to be: a Point (most likely), a MultiPoint (second most likely), or any of a LineString, MultiLineString, or Geometry Collection (all highly unlikely)
+        ### Rather than hope some of these geometry types aren't created when I make my intersection variable, I created the logic below to handle each of these cases in case it does happen
+
+        ## if the geometry type is just a point it's simplest (and what I expect to happen most of the time)
+        if intersection.geom_type == 'Point':
+            intersection_one = intersection
+
+        ## if there are multiple Point-type intersections, get the nearest one (actually want the nearest non-subway one) – likely the second most common option
+        elif intersection.geom_type == 'MultiPoint':
+            intersection_one = min(intersection.geoms, key=lambda p: radial.project(p))
+
+        ## it also could just be a Line if the radial and the CTA_line_one_geom run on exactly the same path for any length
+        ## in that case I can find the shortest distance between the intersecting line and the centroid and then find the point where the shortest distance line intersects with the radial/cta_line_one_geom intersecting line 
+        elif intersection.geom_type == 'LineString':
+            shortest_line_geom = shortest_line(centroid, intersection)
+            intersection_one = shortest_line_geom.intersection(intersection)
+        
+        ## if it's a MultiLineString I will have to do the same logic as for a single line for each of the lines, then return the minimum of the resulting points
+        elif intersection.geom_type == 'MultiLineString':
+            
+            multiline_intersections = []
+
+            for line in intersection.geoms:
+                shortest_line_geom = shortest_line(centroid, line)
+                multiline_intersection = shortest_line_geom.intersection(line)
+                multiline_intersections.append(multiline_intersection)
+            
+            intersection_one = min(multiline_intersections, key=lambda p: radial.project(p))
+        
+        ## and if there is a GeometryCollection I'll have to do a little bit of everything – find the close st of the points and find the closest intersection of the line strings
+        elif intersection.geom_type == 'GeometryCollection':
+            points = [geom for geom in intersection.geoms if geom.geom_type == 'Point']
+            linestrings = [geom for geom in intersection.geoms if geom.geom_type == 'LineString']
+
+            ## first find the single closest point object to the centroid
+            if points:
+                min_intersection_point = min(points, key=lambda p: radial.project(p))
+
+            ## then do more complex stuff if there are linestrings:
+            if linestrings:
+                ## create a blank list
+                multiline_intersections = []
+                
+                for line in linestrings:
+                    ## find the shortest line btwn the centroid and the line
+                    shortest_line_geom = shortest_line(centroid, line)
+                    ## find the place the shortest_line and the line intersect (the closest point along the line to the centroid)
+                    multiline_intersection = shortest_line_geom.intersection(line)
+                    ## then append that point to my list of points called "multiline_intersections"
+                    multiline_intersections.append(multiline_intersection)
+                ## now take the single closest point in my list to the centroid
+                min_intersection_line = min(multiline_intersections, key=lambda p: radial.project(p))
+            
+            ## then return intersection_one as the smaller of the two points I made in the above steps
+            intersection_one = min((min_intersection_point, min_intersection_line), key=lambda p: radial.project(p))
+        
+        ## make a new version of the radial that only includes the distance between the building centroid and the intersection point on the CTA line
+        line_segment = split(radial, intersection_one)
+        ## and calculate the distance to the train by taking the length of that line
+        distance_to_train = centroid.distance(intersection_one)
+        
+        ## also make a df of only the buildings that the line intersects (and make sure not to include the original building)
+        df_intersected_buildings = df_full_projected[(df_full_projected['geometry'].intersects(line_segment)) &
+                                        (not df_full_projected['geometry'].equals(building))]
+        
+        intersected_buildings = df_intersected_buildings['geometry'].to_list()
+
+        ## and find the # of intersected buildings and the max height of the buildings intersected
+        if len(intersected_buildings) > 0:
+            max_height = max(df_intersected_buildings['stories'])
+        else:
+            max_height = 0
+
+        ## NOISE CALCULATION PART:
+        for index, cta_row in cta_lines_projected.iterrows():
+            segment_geom = cta_row['geometry']
+            
+            if segment_geom.distance(intersection_one) > 1e-6:
+                continue
+        
+            daily_trains = cta_row['avg_daily_trains']
+            
+            ## I need the segment type to know which noise threshold to apply (ambient noise values around highways are higher than those not near highways, so I have two different thresholds that apply depending on if the train is in the median of or immediately adjacent to a highway or not)
+            segment_type = cta_row['segment_type']
+            if segment_type == 'hwy':
+                db_threshold = hwy_ambient
+            elif segment_type == 'eag':
+                db_threshold = eag_ambient
+        
+            ## now applying the function of (1/r)*(10^(dB/10)) = (10^expected dB at distance/10), where r is the distance from the train and dB is the volume of the train at 1 meter
+            ## OR
+            ## expected dB at distance = 10*(log10((1/r)*(10^(dB/10))))
+            noise_from_one_train = 10*(math.log10((1/distance_to_train)*(10**(train_avg/10))))
+
+            ## if the noise from one train is not higher than my ambient sound threshold, then I can assume that the sound of the train is imperceptible above the ambient noise of the building's surroundings and thereby the expected noise is 0
+            if noise_from_one_train <= db_threshold:
+                noise_from_one_train = 0
+                daily_noise = 0
+
+            ## otherwise, some more calculation needs to be done
+            elif noise_from_one_train > db_threshold:
+            ## now factoring in the daily avg # of trains on that line segment to estimate the daily total noise from trains
+                daily_noise = daily_trains * noise_from_one_train
+
+            ## I'm also using the values stored earlier about the building's height and the height of the tallest building that is intersected by the radial line
+            ## if the building is shorter than a building inbetween it and the train, I'm assuming 0 noise (the intersected building blocks all the noise in this assumption)
+            if building_stories == 0:
+                intersected_noise_from_one_train = 0
+                intersected_daily_noise = 0
+            elif building_stories > 0:
+                if building_stories <= max_height:
+                    intersected_noise_from_one_train = 0
+                    intersected_daily_noise = 0
+                ## otherwise I'm simply calculating the share of noise blocked by the intersected building as one minus the ratio of the in
+                elif building_stories > max_height:
+                    intersected_noise_from_one_train = noise_from_one_train*(1-(max_height/building_stories))
+                    intersected_daily_noise = daily_noise*(1-(max_height/building_stories))
+        
+        total_noise_from_one_train = total_noise_from_one_train + noise_from_one_train
+        total_daily_noise += daily_noise
+        total_intersected_noise_from_one_train += intersected_noise_from_one_train
+        total_intersected_daily_noise += intersected_daily_noise
+    
+    return  {'geometry': building,
+             'centroid': centroid,
+             'noise_from_one_train': total_noise_from_one_train,
+             'daily_noise': total_daily_noise,
+             'intersected_noise_from_one_train': total_intersected_noise_from_one_train,
+             'intersected_daily_noise': total_intersected_daily_noise,
+             'num_radials': num_radials}
 ```
 
-(1/r) × 10^(dB/10) = 10^(expected dB at distance/10)
+I successfully ran my function on all ~800,000 buildings in my data in just under 7 hours.
 
 
 
