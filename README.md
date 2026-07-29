@@ -65,10 +65,10 @@ Based and the above two criteria, I created 23 distinct track groups. They follo
 
 >As an example, this is how I broke the Blue line into four segments. The Blue line **first** travels from the western suburbs into the city center along the highway, then **second** through the Loop on an underground track, **third** out from the city above ground through the near-northwest neighborhoods, and finally **fourth** to O'Hare airport along the highway again.
 >
->**bl_hwy_south_12**: "bl_" indicates that the only line using this section is the Blue line. "hwy_" indicates that this particualr stretch runs in the median or a highway or else adjacent to a highway. "south_" is an additional note that indicates this is the southern portion of the Blue line (as opposed to bl_hwy_north_14, which runs from the northwestern neighborhoods to O'Hare airport). "12" simply indicates the order in which I created the track groups, but also creates an additional check in case my other naming criteria all resulted in two track sections having identical names. <br>
->**bl_subway_all_11**: As before, "bl_" indicates this track segment is only used by the Blue line. "subway_" shows this track section runs exclusively underground. "all_" here is used to indicate that all sections of the Blue line that run underground are included in this section. And this was the "11"th group I created. <br>
->**bl_eag_north_10**: This section is the only one of the Blue line's path that runs above ground and not adjacent to a highway. As such, I use the "eag_" category here. <br>
->**bl_hwy_north_9** Finally, this section mirrors the syntax of "bl_hwy_south_12", except that this section is the northern stretch of the Blue line that runs along the highway to O'Hare. <br>
+>**bl_hwy_south_12**: "bl_" indicates that the only line using this section is the Blue line. "hwy_" indicates that this particualr stretch runs in the median or a highway or else adjacent to a highway. "south_" is an additional note that indicates this is the southern portion of the Blue line (as opposed to bl_hwy_north_14, which runs from the northwestern neighborhoods to O'Hare airport). "12" simply indicates the order in which I created the track groups, but also creates an additional check in case my other naming criteria all resulted in two track sections having identical names. <br><br>
+>**bl_subway_all_11**: As before, "bl_" indicates this track segment is only used by the Blue line. "subway_" shows this track section runs exclusively underground. "all_" here is used to indicate that all sections of the Blue line that run underground are included in this section. And this was the "11"th group I created. <br><br>
+>**bl_eag_north_10**: This section is the only one of the Blue line's path that runs above ground and not adjacent to a highway. As such, I use the "eag_" category here. <br><br>
+>**bl_hwy_north_9** Finally, this section mirrors the syntax of "bl_hwy_south_12", except that this section is the northern stretch of the Blue line that runs along the highway to O'Hare.
 
 See [Table 1](#table-1-cta-line-segment-groups-with-the-number-of-individual-segments-that-are-included-in-each-group-and-the-average-daiy-number-of-trains-that-run-on-that-section) in the appendix for each group's name, as well as the number of line segments that are included in each group.
 
@@ -117,7 +117,7 @@ train_avg = 93.97 ## dB
 
 <div align-content="left">
 
-$ \frac{1}{r} \cdot 10^{\frac{\text{dB}}{10}} = 10^{\frac{\text{expected dB at distance}}{10}} $
+\frac{1}{r} \cdot 10^{\frac{\text{dB}}{10}} = 10^{\frac{\text{expected dB at distance}}{10}}
 
 
 $ \frac{1}{r} \cdot 10^{\frac{\text{dB}}{10}} = 10^{\frac{\text{dB}_{\text{expected}}}{10}} $
