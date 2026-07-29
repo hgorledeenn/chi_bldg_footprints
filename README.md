@@ -89,10 +89,9 @@ I used official [CTA timetables](/cta_schedule_brochures/) to calculate the numb
 ## 3. Noise Measurements
 In order to accurately measure the specific impact of noise from the CTA trains, I needed to measure both the noise of CTA trains and the ambient noise levels around the city. After putting these measured values into formulas used for calculating noise levels at various distances, I could calculate how much louder than the ambient noise level a passing train would sound.
 
-I recorded noise using the National Institute for Occupational Safety and Health's (NIOSH) Sound Level Meter (SLM) app.
+I recorded noise using the National Institute for Occupational Safety and Health's (NIOSH) Sound Level Meter (SLM) app. [Table 3](#table-3-location-measurement-focus-duration-and-measured-level-for-my-highway-ambient-noise-measurements), [Table 4](#table-4-location-measurement-focus-duration-and-measured-level-for-my-elevatedat-grade-ambient-noise-measurements), and [Table 5](#table-5-location-distance-from-train-train-route-measured-duration-measured-level-and-calculated-db-at-1-meter-from-train-for-each-of-my-train-noise-measurements) contain the raw results for my noise measurements of highway ambient noise levels, non-highway ambient noise levels, and train noise levels, respectively.
 
-FINISH THIS FINISH THIS
-<br><br><br><br><br><br><br><br><br><br><br>
+For ambient noise measurements, I aimed to record for roughly 3 minutes uninterrupted. For train noise measurements, I timed my recording to only occur when the train was directly passing by me. All of the individual noise reports can be found in the [noise_reports](/noise_reports/) folder, and each individual report is linked to from its respective table row in the appendix.
 
 <br>
 
