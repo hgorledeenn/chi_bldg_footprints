@@ -13,7 +13,7 @@
 6. [Appendix](#appendix)
 
 
-## The Project:
+## 1. The Project
 This repository is one piece of the data analysis for my Columbia Journalism School master's thesis.
 
 In this project, I conduct a spatial analysis of buildings in Chicago to estiamte the noise each building experiences from nearby Chicago Transit Authority train lines. The project uses sound measurements I took around the city and the Shapely Python package to estimate each building's noise from trains, taking into account the average noise levels around the city.
@@ -22,7 +22,7 @@ The ultimate goal of this project is to create a reliable measure of expected no
 
 <br>
 
-## The Data:
+## 2. The Data
 My analysis largely relies on two data sets, both of them public and maintained by the city.
 
 ### [Building Footprints](https://data.cityofchicago.org/Buildings/Building-Footprints/syp8-uezg/about_data):
@@ -86,22 +86,100 @@ I used official [CTA timetables](/cta_schedule_brochures/) to calculate the numb
 
 <br>
 
-## Noise Measurements:
+## 3. Noise Measurements
 In order to accurately measure the specific impact of noise from the CTA trains, I needed to measure both the noise of CTA trains and the ambient noise levels around the city. After putting these measured values into formulas used for calculating noise levels at various distances, I could calculate how much louder than the ambient noise level a passing train would sound.
 
 I recorded noise using the National Institute for Occupational Safety and Health's (NIOSH) Sound Level Meter (SLM) app.
 
+FINISH THIS FINISH THIS
+<br><br><br><br><br><br><br><br><br><br><br>
 
 <br>
 
-## My Function:
+## 4. My Function
 The current iteration of this project is my second try at estimating noise for buildings. The code for my first attempt can be found in the [first_attempt_notebooks](/first_attempt_notebooks/) folder.
 
 In this approach, I draw up to 8 lines extending from each building's centroid to more accurately measure noise when it comes from multiple directions (eg. if a building is situated near the intersection of two perpendicular line segments). The below illustration outlines the basic logic of my function:
 
 <img src="imgs/circular_noise_calculations.png" width="90%" caption="my box in relation to Chicago">
 
-As above, my Python function has multiple steps. I have included the entire function below and left annotations throughout that explain the purpose of each code section
+The [entire annotated function](#my-full-annotated-function) can be found in the appendix, and the un-annotated version is in [3_running_my_function.ipynb](3_running_my_function.ipynb). I successfully ran my function on all ~800,000 buildings in my data in just under 7 hours.
+
+<br>
+
+## 5. Results
+
+
+## 6. Appendix:
+
+### Table 1: CTA line segment groups with the number of individual segments that are included in each group and the average daily number of trains that run on that section
+
+| Group Name | # of Line Segments | Avg. Daily Trains |
+| --- | --- | --- |
+| pu_eag_north_1 | 8 | 305.630137 |
+| yl_eag_all_2 | 2 | 152.767123 |
+| redpur_eag_north_3 | 13 | 479.901370 |
+| br_eag_north_4 | 11 | 320.013699 |
+| bropurred_eag_north_5 | 6 | 799.915068 |
+| bropur_eag_north_6 | 4 | 401.054795 |
+| rd_subway_all_7 | 10 | 398.860274 |
+| red_hwy_south_8 | 8 | 398.860274 |
+| bl_hwy_north_9 | 9 | 389.901370 |
+| bl_eag_north_10 | 5 | 389.901370 |
+| bl_subway_all_11 | 8 | 389.901370 |
+| bl_hwy_south_12 | 12 | 292.424658 |
+| gr_eag_west_13 | 11 | 246.926027 |
+| pi_eag_west_14 | 11 | 235.750685 |
+| or_eag_mdw_15 | 6 | 264.131507 |
+| or_hwy_mdw_16 | 1 | 264.131507 |
+| gr_eag_ashland63_17 | 2 | 122.065753 |
+| gr_eag_cottgro63_18 | 2 | 124.860274 |
+| gr_eag_south_19 | 8 | 246.926027 |
+| gror_eag_south_20 | 2 | 511.057534 |
+| grpi_eag_west_21 | 4 | 483.312329 |
+| brorpipu_eag_loopsouth_22 | 5 | 900.936986 |
+| brgrorpipu_eag_loopnorth_23 | 5 | 1147.863014 |
+
+### Table 2: The number of times each day of the week or holiday schedule applied to the CTA trains in 2025
+| Day | # in 2025 |
+| --- | --- |
+| Saturday | 52 |
+| Sunday | 52 |
+| Monday | 50 |
+| Tuesday | 52 |
+| Wednesday | 52 |
+| Thursday | 50 |
+| Friday | 51 |
+| Holiday | 6 |
+
+### Table 3: Location, measurement focus, duration, and measured level for my **highway** ambient noise measurements
+| Report # | Location | Duration (mm:ss) | dB Level (LAeq) |
+| --- | --- | --- | --- |
+| [1](/noise_reports/1_hwy_ambient_1.pdf) | 5865–5899 W Railroad Ave | 02:39 | 73.2 |
+| [5](/noise_reports/5_hwy_ambient_3.pdf) | 5128 S. Wells St | 03:02 | 79.1 |
+| | | **Average:** | **76.15** |
+
+### Table 4: Location, measurement focus, duration, and measured level for my **elevated/at grade** ambient noise measurements
+| Report # | Location | Duration (mm:ss) | dB Level (LAeq) |
+| --- | --- | --- | --- |
+| [4](/noise_reports/4_eag_ambient_2.pdf) | 5213 S. Avers Ave | 03:02 | 67.1 |
+| [6](/noise_reports/6_eag_ambient_4.pdf) | E. 54th St & S. Prarie Ave | 03:53 | 64.9 |
+| [7](/noise_reports/7_eag_ambient_5.pdf) | 77 E. Adams St | 03:00 | 69.9 |
+| [12](/noise_reports/12_eag_ambient_6.pdf) | 6302 N. Winthrop Ave | 02:12 | 57.8 |
+| | | **Average:** | **64.93** |
+
+### Table 5: Location, distance from train, train route measured, duration, measured level, and calculated dB at 1-meter from train for each of my train noise measurements
+| Report # | Location | Train Route | Distance from train (m) | Duration (mm:ss) | dB Level (LAeq) | Calculated dB @ 1 meter |
+| --- | --- | --- | --- | --- | --- | --- |
+| [2](/noise_reports/2_train_1_52_ft.pdf) | 2124 S 47th Ct | Pink | 15.85 | 00:11 | 82.6 | 94.60 |
+| [3](/noise_reports/3_train_2_40_ft.pdf) | 2124 S 47th Ct | Pink | 12.19 | 00:09 | 79.5 | 90.36 |
+| [8](/noise_reports/8_train_3_31_ft.pdf) | 200 W. Randolph St (2nd floor) | Brown | 9.45 | 00:11 | 89.6 | 99.35 |
+| [9](/noise_reports/9_train_4_43_ft.pdf) | 200 W. Randolph St (2nd floor) | Purple | 13.11 | 00:17 | 77.7 | 88.88 |
+| [10](/noise_reports/10_train_5_75_ft.pdf) | 1110 W. Sheridan Rd (2nd floor) | Purple | 22.86 | 00:07 | 84.9 | 98.49 |
+| [11](/noise_reports/11_train_6_47_ft.pdf) | 1110 W. Sheridan Rd (2nd floor) | Red | 14.33 | 00:09 | 80.6 | 92.16 |
+| | | | | | **Average:** | **93.97** |
+
+### My full annotated function:
 
 ``` python
 noise_radius = 802 ## meters
@@ -305,96 +383,3 @@ def radial_noise_calc(row):
              'intersected_daily_noise': total_intersected_daily_noise,
              'num_radials': num_radials}
 ```
-
-I successfully ran my function on all ~800,000 buildings in my data in just under 7 hours.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-My first function only created a single line between each building's centroid and the nearest point on any CTA line. For reasons explained [a few sections down](#3_merging_train_linesipynb), it's important to calculate noise levels for multiple lines to allow for cases where a building is situated near a corner created by two lines intersecting or overlapping.
-
-The below diagram and accompanying text outlines how the function I'm currently working on will solve this problem by drawing a radius based on the distance it takes noise from the train to quiet to the average city noise level and calculating noise for several lines between the building centroid and the edge of the circle.
-
-
-
-
-## Appendix:
-
-### Table 1: CTA line segment groups with the number of individual segments that are included in each group and the average daily number of trains that run on that section
-
-| Group Name | # of Line Segments | Avg. Daily Trains |
-| --- | --- | --- |
-| pu_eag_north_1 | 8 | 305.630137 |
-| yl_eag_all_2 | 2 | 152.767123 |
-| redpur_eag_north_3 | 13 | 479.901370 |
-| br_eag_north_4 | 11 | 320.013699 |
-| bropurred_eag_north_5 | 6 | 799.915068 |
-| bropur_eag_north_6 | 4 | 401.054795 |
-| rd_subway_all_7 | 10 | 398.860274 |
-| red_hwy_south_8 | 8 | 398.860274 |
-| bl_hwy_north_9 | 9 | 389.901370 |
-| bl_eag_north_10 | 5 | 389.901370 |
-| bl_subway_all_11 | 8 | 389.901370 |
-| bl_hwy_south_12 | 12 | 292.424658 |
-| gr_eag_west_13 | 11 | 246.926027 |
-| pi_eag_west_14 | 11 | 235.750685 |
-| or_eag_mdw_15 | 6 | 264.131507 |
-| or_hwy_mdw_16 | 1 | 264.131507 |
-| gr_eag_ashland63_17 | 2 | 122.065753 |
-| gr_eag_cottgro63_18 | 2 | 124.860274 |
-| gr_eag_south_19 | 8 | 246.926027 |
-| gror_eag_south_20 | 2 | 511.057534 |
-| grpi_eag_west_21 | 4 | 483.312329 |
-| brorpipu_eag_loopsouth_22 | 5 | 900.936986 |
-| brgrorpipu_eag_loopnorth_23 | 5 | 1147.863014 |
-
-### Table 2: The number of times each day of the week or holiday schedule applied to the CTA trains in 2025
-| Day | # in 2025 |
-| --- | --- |
-| Saturday | 52 |
-| Sunday | 52 |
-| Monday | 50 |
-| Tuesday | 52 |
-| Wednesday | 52 |
-| Thursday | 50 |
-| Friday | 51 |
-| Holiday | 6 |
-
-### Table 3: Location, measurement focus, duration, and measured level for my **highway** ambient noise measurements
-| Report # | Location | Duration (mm:ss) | dB Level (LAeq) |
-| --- | --- | --- | --- |
-| [1](/noise_reports/1_hwy_ambient_1.pdf) | 5865–5899 W Railroad Ave | 02:39 | 73.2 |
-| [5](/noise_reports/5_hwy_ambient_3.pdf) | 5128 S. Wells St | 03:02 | 79.1 |
-| | | **Average:** | **76.15** |
-
-### Table 4: Location, measurement focus, duration, and measured level for my **elevated/at grade** ambient noise measurements
-| Report # | Location | Duration (mm:ss) | dB Level (LAeq) |
-| --- | --- | --- | --- |
-| [4](/noise_reports/4_eag_ambient_2.pdf) | 5213 S. Avers Ave | 03:02 | 67.1 |
-| [6](/noise_reports/6_eag_ambient_4.pdf) | E. 54th St & S. Prarie Ave | 03:53 | 64.9 |
-| [7](/noise_reports/7_eag_ambient_5.pdf) | 77 E. Adams St | 03:00 | 69.9 |
-| [12](/noise_reports/12_eag_ambient_6.pdf) | 6302 N. Winthrop Ave | 02:12 | 57.8 |
-| | | **Average:** | **64.93** |
-
-### Table 5: Location, distance from train, train route measured, duration, measured level, and calculated dB at 1-meter from train for each of my train noise measurements
-| Report # | Location | Train Route | Distance from train (m) | Duration (mm:ss) | dB Level (LAeq) | Calculated dB @ 1 meter |
-| --- | --- | --- | --- | --- | --- | --- |
-| [2](/noise_reports/2_train_1_52_ft.pdf) | 2124 S 47th Ct | Pink | 15.85 | 00:11 | 82.6 | 94.60 |
-| [3](/noise_reports/3_train_2_40_ft.pdf) | 2124 S 47th Ct | Pink | 12.19 | 00:09 | 79.5 | 90.36 |
-| [8](/noise_reports/8_train_3_31_ft.pdf) | 200 W. Randolph St (2nd floor) | Brown | 9.45 | 00:11 | 89.6 | 99.35 |
-| [9](/noise_reports/9_train_4_43_ft.pdf) | 200 W. Randolph St (2nd floor) | Purple | 13.11 | 00:17 | 77.7 | 88.88 |
-| [10](/noise_reports/10_train_5_75_ft.pdf) | 1110 W. Sheridan Rd (2nd floor) | Purple | 22.86 | 00:07 | 84.9 | 98.49 |
-| [11](/noise_reports/11_train_6_47_ft.pdf) | 1110 W. Sheridan Rd (2nd floor) | Red | 14.33 | 00:09 | 80.6 | 92.16 |
-| | | | | | **Average:** | **93.97** |
